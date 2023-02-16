@@ -19,10 +19,10 @@ public class User implements UserDetails {
     private String name;
 
     @Column
-    private String surname;
+    private int age;
 
     @Column
-    private int age;
+    private String email;
 
      @Column
     private String username;
@@ -41,10 +41,10 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String name, String surname, int age) {
+    public User(String name, int age, String email) {
         this.name = name;
-        this.surname = surname;
         this.age = age;
+        this.email = email;
     }
 
     public long getId() {
@@ -63,12 +63,12 @@ public class User implements UserDetails {
         this.name = name;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getEmail() {
+        return email;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public int getAge() {
@@ -110,10 +110,6 @@ public class User implements UserDetails {
         return this.password;
     }
 
-//    @Override
-//    public String getUsername() {
-//        return this.username;
-//    }
 
     @Override
     public boolean isAccountNonExpired() {

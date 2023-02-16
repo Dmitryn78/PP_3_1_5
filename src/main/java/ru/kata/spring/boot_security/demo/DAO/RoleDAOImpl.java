@@ -1,7 +1,6 @@
-package ru.kata.spring.boot_security.demo.service;
+package ru.kata.spring.boot_security.demo.DAO;
 
-import org.springframework.stereotype.Service;
-import ru.kata.spring.boot_security.demo.DAO.RoleDAO;
+import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.model.Role;
 
 import javax.persistence.EntityManager;
@@ -9,21 +8,11 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 
-@Service
-public class RoleServiceImpl implements RoleService{
-    private final RoleDAO roleDAO;
+@Repository
+public class RoleDAOImpl implements RoleDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
-
-    public RoleServiceImpl(RoleDAO roleDAO) {
-        this.roleDAO = roleDAO;
-    }
-
-    @Override
-    public List<Role> getAllRoles() {
-        return roleDAO.getAllRoles();
-    }
 
     @Override
     public Role getRoleByName(String name) {
@@ -32,4 +21,8 @@ public class RoleServiceImpl implements RoleService{
         return (Role) query.getSingleResult();
     }
 
+    @Override
+    public List<Role> getAllRoles() {
+        return entityManager.createQuery("select role from Role role", Role.class).getResultList();
+    }
 }

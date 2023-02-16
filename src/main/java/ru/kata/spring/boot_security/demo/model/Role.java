@@ -14,6 +14,14 @@ public class Role implements GrantedAuthority {
     @Column
     private String name;
 
+    public Role() {
+    }
+
+    public Role(String name) {
+        this.name = name;
+    }
+
+
     public long getId() {
         return id;
     }
@@ -34,4 +42,10 @@ public class Role implements GrantedAuthority {
     public String getAuthority() {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return name.replace("ROLE_", "");
+    }
+
 }

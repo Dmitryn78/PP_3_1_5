@@ -8,9 +8,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.DAO.UserDAO;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,21 +19,47 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements UserDetailsService {
 
-    private  UserRepository userRepository;
+     private UserDAO userDAO;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    @Transactional
+    public User getUserByUsername(String username) {
+        return userDAO.getUserByUsername(username);
+    }
+
+    @Transactional
+    public User getUserById(long id) {
+        return userDAO.getUserById(id);
+    }
+
+    @Transactional
+    public List<User> getAllUsers() {
+        return userDAO.getAllUsers();
+    }
+
+    @Transactional
+    public void addUser(User user) {
+        userDAO.addUser(user);
+    }
+
+    @Transactional
+    public void deleteUserById(User user) {
+        userDAO.deleteUserById(user.getId());
+    }
+
+    @Transactional
+    public void updateUser(User user) {
+        userDAO.updateUser(user);
     }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByUsername(username);
+        User user = getUserByUsername(username);
         if(user == null) {
             throw new UsernameNotFoundException(String.format("user '%s' not found", username));
         }
@@ -45,23 +71,4 @@ public class UserService implements UserDetailsService {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    public void addUser(User user) {
-        userRepository.save(user);
-    }
-
-    public User getUserById(long id) {
-        return userRepository.findById(id).orElse(null);
-    }
-
-    public void updateUser(User user) {
-        userRepository.save(user);
-    }
-
-    public void deleteUserById(long id) {
-        userRepository.deleteById(id);
-    }
 }
