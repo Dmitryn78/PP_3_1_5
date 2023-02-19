@@ -14,14 +14,12 @@ public class Role implements GrantedAuthority {
     @Column
     private String name;
 
-    public Role() {
-    }
-
     public Role(String name) {
         this.name = name;
     }
 
-
+    public Role() {
+    }
     public long getId() {
         return id;
     }

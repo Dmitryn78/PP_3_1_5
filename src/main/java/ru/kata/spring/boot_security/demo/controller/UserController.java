@@ -22,7 +22,6 @@ public class UserController {
     @GetMapping
     public String getUserInfo(Model model, Principal principal) {
         model.addAttribute("user", userService.getUserByUsername(principal.getName()));
-        System.out.println("STOP");
         return "user";
     }
 

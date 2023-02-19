@@ -42,13 +42,18 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
+    public User getUserByEmail(String email) {
+        return userDAO.getUserByEmail(email);
+    }
+
+    @Transactional
     public void addUser(User user) {
         userDAO.addUser(user);
     }
 
     @Transactional
-    public void deleteUserById(User user) {
-        userDAO.deleteUserById(user.getId());
+    public void deleteUserById(long id) {
+        userDAO.deleteUserById(id);
     }
 
     @Transactional

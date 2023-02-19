@@ -27,9 +27,10 @@ public class RoleServiceImpl implements RoleService{
 
     @Override
     public Role getRoleByName(String name) {
-        Query query = entityManager.createQuery("select role from Role role where role.name = :name", Role.class);
-        query.setParameter("name", name);
-        return (Role) query.getSingleResult();
+//        Query query = entityManager.createQuery("select role from Role role where role.name = :name", Role.class);
+//        query.setParameter("name", name);
+//        return (Role) query.getSingleResult();
+        return roleDAO.getRoleByName(name);
     }
 
 }
