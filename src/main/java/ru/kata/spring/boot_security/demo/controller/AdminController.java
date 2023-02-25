@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class AdminController {
     }
 
     @GetMapping
-    public String getAdminPage(Model model, Principal principal, User user) {
+    public String getAdminPage(Model model, Principal principal) {
         model.addAttribute("user", userService.getUserByUsername(principal.getName()));
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("listRoles", roleService.getAllRoles());
@@ -35,32 +36,46 @@ public class AdminController {
         return "adminPage";
     }
 
+    @GetMapping("/userList")
+    @ResponseBody
+    public ResponseEntity<List<User>> getUserList() {
+        System.out.println("we were here!");
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
     @PostMapping("/createNewUser")
-    public String createUser(@ModelAttribute("newUser") User user) {
+    @ResponseBody
+    public ResponseEntity<String> createUser(@RequestBody User user) {
         List<Role> listRoles = new ArrayList<>();
+        System.out.println("add new");
+        System.out.println(user.toString());
         for (Role role : user.getRoles()) {
             listRoles.add(roleService.getRoleByName(role.getName()));
         }
         user.setRoles(listRoles);
         userService.addUser(user);
-        return "redirect:/admin";
+        return ResponseEntity.ok("");
     }
 
     @PatchMapping("/editUser")
-    public String updateUser(User user) {
+    @ResponseBody
+    public ResponseEntity<String> updateUser(@RequestBody User user) {
+        System.out.println("update");
+        System.out.println(user.toString());
         List<Role> listRoles = new ArrayList<>();
+        user.getRoles().forEach(System.out::println);
         for (Role role : user.getRoles()) {
             listRoles.add(roleService.getRoleByName(role.getName()));
         }
         user.setRoles(listRoles);
         userService.updateUser(user);
-        return "redirect:/admin";
+        return ResponseEntity.ok().body("");
     }
 
     @DeleteMapping("/deleteUser/{id}")
-    public String deleteUser(@PathVariable("id") int id) {
+    @ResponseBody
+    public void deleteUser(@PathVariable("id") int id) {
         userService.deleteUserById(id);
-        return "redirect:/admin";
     }
 
 
